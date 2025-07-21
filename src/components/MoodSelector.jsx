@@ -1,4 +1,5 @@
 import React from 'react'
+import TinderCard from 'react-tinder-card'
 import { Heart, Smile, Frown, Zap, Coffee, Star } from 'lucide-react'
 
 const MoodSelector = ({ onMoodSelect }) => {
@@ -11,31 +12,40 @@ const MoodSelector = ({ onMoodSelect }) => {
     { id: 'nostalgic', name: 'Nostalgic', icon: Star, color: 'from-purple-400 to-violet-400', description: 'Feeling sentimental' }
   ]
 
+  const handleSwipe = (direction, moodId) => {
+    if (direction === 'right') {
+      onMoodSelect(moodId)
+    }
+    // Swiping left does nothing except move to next card
+  }
+
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-md mx-auto flex flex-col items-center">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-white mb-4">How are you feeling today?</h2>
-        <p className="text-gray-300 text-lg">Select your current mood to get personalized movie recommendations</p>
+        <p className="text-gray-300 text-lg">Swipe a card to select your current mood</p>
       </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {moods.map((mood) => {
+      <div className="relative w-80 h-96 flex items-center justify-center">
+        {moods.map((mood, idx) => {
           const IconComponent = mood.icon
           return (
-            <button
+            <TinderCard
               key={mood.id}
-              onClick={() => onMoodSelect(mood.id)}
-              className="group relative overflow-hidden rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105"
+              onSwipe={(dir) => handleSwipe(dir, mood.id)}
+              preventSwipe={['up', 'down']}
+              className="absolute w-full h-full"
             >
-              <div className={`absolute inset-0 bg-gradient-to-br ${mood.color} opacity-0 group-hover:opacity-20 transition-opacity duration-300`} />
-              <div className="relative p-8 text-center">
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br ${mood.color} mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  <IconComponent className="w-8 h-8 text-white" />
+              <div className={`flex flex-col items-center justify-center w-full h-full rounded-3xl shadow-xl bg-gradient-to-br ${mood.color} p-8 border-4 border-white/20`}
+                style={{ zIndex: moods.length - idx }}
+              >
+                <div className="mb-6">
+                  <IconComponent className="w-16 h-16 text-white drop-shadow-lg" />
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-2">{mood.name}</h3>
-                <p className="text-gray-300 text-sm">{mood.description}</p>
+                <h3 className="text-2xl font-bold text-white mb-2 drop-shadow">{mood.name}</h3>
+                <p className="text-white text-lg text-center opacity-90 drop-shadow-sm">{mood.description}</p>
+                <div className="mt-8 text-white/70 text-sm">Swipe left or right</div>
               </div>
-            </button>
+            </TinderCard>
           )
         })}
       </div>
