@@ -1,7 +1,9 @@
 import React from 'react'
 import { ArrowLeft, Star, Calendar, Tag } from 'lucide-react'
 
-const MovieRecommendations = ({ mood, movies, onBack }) => {
+const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p/w500'
+
+const MovieRecommendations = ({ mood, movies, onBack, onMovieClick }) => {
   const moodNames = {
     happy: 'Happy',
     sad: 'Sad',
@@ -30,15 +32,24 @@ const MovieRecommendations = ({ mood, movies, onBack }) => {
         {movies.map((movie) => (
           <div
             key={movie.id}
-            className="group bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105 overflow-hidden"
+            className="group bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105 overflow-hidden cursor-pointer"
+            onClick={() => onMovieClick(movie)}
+            title={`View details for ${movie.title}`}
           >
-            <div className="p-6">
-              <div className="text-4xl mb-4 text-center">{movie.poster}</div>
-              <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-purple-300 transition-colors">
+            <div className="p-6 flex flex-col items-center">
+              {movie.poster_path ? (
+                <img
+                  src={`${TMDB_IMAGE_BASE}${movie.poster_path}`}
+                  alt={movie.title}
+                  className="rounded-lg mb-4 w-full h-64 object-cover shadow-lg"
+                />
+              ) : (
+                <div className="h-64 w-full flex items-center justify-center bg-gray-700 text-white mb-4 rounded-lg">No Image</div>
+              )}
+              <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-purple-300 transition-colors text-center">
                 {movie.title}
               </h3>
-              
-              <div className="space-y-2 text-sm text-gray-300">
+              <div className="space-y-2 text-sm text-gray-300 mb-2">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
                   <span>{movie.year}</span>
@@ -51,6 +62,28 @@ const MovieRecommendations = ({ mood, movies, onBack }) => {
                   <Star className="w-4 h-4 text-yellow-400" />
                   <span>{movie.rating}/10</span>
                 </div>
+              </div>
+              {/* Streaming Providers */}
+              <div className="mt-2 w-full">
+                <div className="text-xs text-gray-400 mb-1">Available on:</div>
+                {movie.providers && movie.providers.length > 0 ? (
+                  <div className="flex flex-wrap gap-2 items-center justify-center">
+                    {movie.providers.map((provider) => (
+                      <div key={provider.provider_id} className="flex flex-col items-center">
+                        {provider.logo_path ? (
+                          <img
+                            src={`${TMDB_IMAGE_BASE}${provider.logo_path}`}
+                            alt={provider.provider_name}
+                            className="w-8 h-8 rounded mb-1 bg-white"
+                          />
+                        ) : null}
+                        <span className="text-[10px] text-white text-center max-w-[60px] truncate">{provider.provider_name}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-xs text-gray-500 text-center">Not available for streaming in India</div>
+                )}
               </div>
             </div>
           </div>
