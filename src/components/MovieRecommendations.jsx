@@ -1,5 +1,6 @@
 import React from 'react'
 import { ArrowLeft, Star, Calendar, Tag } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p/w500'
 
@@ -18,7 +19,7 @@ const MovieRecommendations = ({ mood, movies, onBack, onMovieClick }) => {
       <div className="flex items-center gap-4 mb-8">
         <button
           onClick={onBack}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-colors duration-200"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Moods</span>
@@ -29,12 +30,18 @@ const MovieRecommendations = ({ mood, movies, onBack, onMovieClick }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {movies.map((movie) => (
-          <div
+        {movies.map((movie, idx) => (
+          <motion.div
             key={movie.id}
-            className="group bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105 overflow-hidden cursor-pointer"
+            className="group bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105 hover:shadow-2xl overflow-hidden cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-400"
             onClick={() => onMovieClick(movie)}
             title={`View details for ${movie.title}`}
+            tabIndex={0}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.06, duration: 0.5, type: 'spring' }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
           >
             <div className="p-6 flex flex-col items-center">
               {movie.poster_path ? (
@@ -86,7 +93,7 @@ const MovieRecommendations = ({ mood, movies, onBack, onMovieClick }) => {
                 )}
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 

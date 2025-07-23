@@ -24,6 +24,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background: linear-gradient(135deg, #24243e 0%, #302b63 50%, #0f0c29 100%);
 }
 
 #root {
@@ -38,4 +39,16 @@ body {
     color: #213547;
     background-color: #ffffff;
   }
+}
+
+/* Accessibility: focus ring for keyboard navigation */
+:focus-visible {
+  outline: 2px solid #a78bfa;
+  outline-offset: 2px;
+  transition: outline 0.2s;
+}
+
+/* Smooth transitions for theme and interactive states */
+html, body, #root {
+  transition: background 0.4s, color 0.4s;
 } 
