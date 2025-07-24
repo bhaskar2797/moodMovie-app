@@ -1,6 +1,6 @@
 # 🎬 MoodMovie - AI-Powered Mood-Based Movie Recommendations
 
-A beautiful React application that recommends movies based on your current mood. Built with modern web technologies and a dynamic, personalized recommendation engine.
+A beautiful React application that recommends movies based on your current mood. Vibe-coded in couple of days.. not perfect.
 
 ## ✨ Features
 
